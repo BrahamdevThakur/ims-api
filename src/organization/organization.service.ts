@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateOrganizationDto } from './dto/create-organization.dto';
 import { UpdateOrganizationDto } from './dto/update-organization.dto';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from 'src/prisma/prisma.services';
 import { capitalizeFirstLetterOfEachWordInAPhrase } from 'src/helpers/capitalizes';
 
 @Injectable()
@@ -57,7 +57,7 @@ export class OrganizationsService {
   private async checkIfOrganizationExist(name: string, id?: number): Promise<boolean> {
     const organization = await this.prismaService.organization.findFirst({
       where : { name }
-    });
+    })
 
     if (id) {
       return organization ? organization.id === id : true;

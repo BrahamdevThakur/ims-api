@@ -2,8 +2,9 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from 'src/prisma/prisma.services';
 import { capitalizeFirstLetterOfEachWordInAPhrase } from 'src/helpers/capitalizes';
+import { request } from 'https';
 
 @Injectable()
 export class RolesService {
@@ -19,7 +20,7 @@ export class RolesService {
     });
 
     if (role) {
-      throw new BadRequestException(`Role ${createRoleDto.name} has already been taken`);
+      throw new BadRequestException(`Role ${createRoleDto.name} has been already taken`);
     }
 
     return this.prismaService.role.create({ data: createRoleDto });
@@ -39,8 +40,8 @@ export class RolesService {
     updateRoleDto.name = capitalizeFirstLetterOfEachWordInAPhrase(updateRoleDto.name);
 
     const role = await this.prismaService.role.findFirst({
-      where: {
-        name: updateRoleDto.name,
+     where: {
+       name: updateRoleDto.name,
       },
     });
 
